@@ -10,7 +10,7 @@ class Menu:
             "description": description
         }
 
-    def run(self, prompt_message: str, invalid_option_message: str):
+    def run(self, prompt_message: str = None, invalid_option_message: str = None):
         for key, option in self.options.items():
             print(f'{key}: {option["description"]}')
 
@@ -35,8 +35,7 @@ if __name__ == "__main__":
 
         print('')
         menu.run(
-            prompt_message='Select an option: ',
-            invalid_option_message='Invalid selection.'
+            prompt_message='Select an option: '
         )
         if menu.last_choice == 'q':
             break

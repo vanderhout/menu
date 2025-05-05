@@ -2,7 +2,7 @@ import setuptools
 
 setuptools.setup(
     name="Menu",
-    version="0.0.1",
+    version="0.0.2",
     author="https://github.com/vanderhout",
     packages=setuptools.find_packages(),
     install_requires=[
