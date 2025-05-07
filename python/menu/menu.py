@@ -14,7 +14,10 @@ class Menu:
         for key, option in self.options.items():
             print(f'{key}: {option["description"]}')
 
-        self.last_choice = input(prompt_message).strip()
+        if prompt_message is not None:
+            self.last_choice = input(prompt_message).strip()
+        else:
+            self.last_choice = input().strip()
         if self.last_choice in self.options:
             option = self.options[self.last_choice]
             if option["function"] is not None:
@@ -26,16 +29,32 @@ if __name__ == "__main__":
     def set_value(value):
         print(f'Value set to {value}.')
 
-    while True:
-        menu = Menu()
-        menu.add_option('1', set_value, '1', 'Set the value to 1.')
-        menu.add_option('2', set_value, '2', 'Set the value to 2.')
-        menu.add_option('3', set_value, '3', 'Set the value to 3.')
-        menu.add_option('q', None, None, 'Quit.')
+    menu = Menu()
 
+    menu.add_option('1', set_value, '1', 'Set the value to 1.')
+    menu.add_option('2', set_value, '2', 'Set the value to 2.')
+    menu.add_option('3', set_value, '3', 'Set the value to 3.')
+    menu.add_option('q', None, None, 'Quit to next section.')
+
+    while True:
+        print('')
+        menu.run()
+        if menu.last_choice == 'q':
+            break
+
+    while True:
         print('')
         menu.run(
-            prompt_message='Select an option: '
+            prompt_message='Prompt message added.'
+        )
+        if menu.last_choice == 'q':
+            break
+
+    while True:
+        print('')
+        menu.run(
+            prompt_message='Invalid selection message added: make a selection from the following:',
+            invalid_option_message='Invalid selection.'
         )
         if menu.last_choice == 'q':
             break
