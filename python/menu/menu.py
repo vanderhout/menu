@@ -27,11 +27,11 @@ class Menu:
             self.print_option_function(key, option["description"])
 
         if prompt_message is not None:
-            choice = input(prompt_message).strip()
+            key_choice = input(prompt_message)
         else:
-            choice = input().strip()
-        if choice in self.options:
-            option = self.options[choice]
+            key_choice = input()
+        if key_choice in self.options:
+            option = self.options[key_choice]
             if option["function"] is not None:
                 return option["function"](option["context"])
         elif self.invalid_selection_function is not None:
