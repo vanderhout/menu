@@ -1,7 +1,7 @@
 def _default_print_option_function(key, description):
     print(f"{key}: {description}")
 
-def _default_invalid_selection_function(key):
+def _default_invalid_selection_function():
     print(f"Invalid selection.")
     return True
 
