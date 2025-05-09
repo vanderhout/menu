@@ -1,7 +1,15 @@
+def _default_print_option_function(key, description):
+    print(f"{key}: {description}")
+
+def _default_invalid_selection_function(key):
+    print(f"Invalid selection.")
+    return True
+
 class Menu:
     def __init__(self):
         self.options = {}
-        self.last_choice = None
+        self.print_option_function = _default_print_option_function
+        self.invalid_selection_function = _default_invalid_selection_function
 
     def add_option(self, key: str, function, context, description: str):
         self.options[key] = {
@@ -10,24 +18,31 @@ class Menu:
             "description": description
         }
 
-    def run(self, prompt_message: str = None, invalid_option_message: str = None):
+    def run(self, prompt_message: str = None):
+        '''
+        Display all the menu choices, accept an input from the user, and return either a value based on the function
+        tied to the option, a value based on the function tied to an invalid option, or None.
+        '''
         for key, option in self.options.items():
-            print(f'{key}: {option["description"]}')
+            self.print_option_function(key, option["description"])
 
         if prompt_message is not None:
-            self.last_choice = input(prompt_message).strip()
+            choice = input(prompt_message).strip()
         else:
-            self.last_choice = input().strip()
-        if self.last_choice in self.options:
-            option = self.options[self.last_choice]
+            choice = input().strip()
+        if choice in self.options:
+            option = self.options[choice]
             if option["function"] is not None:
-                option["function"](option["context"])
-        elif invalid_option_message is not None:
-            print(invalid_option_message)
+                return option["function"](option["context"])
+        elif self.invalid_selection_function is not None:
+            return self.invalid_selection_function()
+
+        return None
 
 if __name__ == "__main__":
     def set_value(value):
         print(f'Value set to {value}.')
+        return True
 
     menu = Menu()
 
@@ -38,23 +53,39 @@ if __name__ == "__main__":
 
     while True:
         print('')
-        menu.run()
-        if menu.last_choice == 'q':
+        result = menu.run()
+        if result is None:
             break
 
     while True:
         print('')
-        menu.run(
+        result = menu.run(
             prompt_message='Prompt message added.'
         )
-        if menu.last_choice == 'q':
+        if result is None:
             break
 
+    def new_print_function(key, description):
+        print(f"{key.upper()}: {description.upper()}")
+    menu.print_option_function = new_print_function
     while True:
         print('')
-        menu.run(
-            prompt_message='Invalid selection message added: make a selection from the following:',
-            invalid_option_message='Invalid selection.'
+        result = menu.run(
+            prompt_message='New print function.'
         )
-        if menu.last_choice == 'q':
+        if result is None:
+            break
+
+    def new_invalid_selection_function():
+        for i in range(3):
+            print('INVALID SELECTION!')
+        return True
+
+    menu.invalid_selection_function = new_invalid_selection_function
+    while True:
+        print('')
+        result = menu.run(
+            prompt_message='New print function.'
+        )
+        if result is None:
             break
