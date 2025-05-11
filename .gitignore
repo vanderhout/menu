@@ -2,3 +2,6 @@ python/.idea/
 python/build/
 python/dist/
 python/Menu.egg-info/
+c#/menu/.vs/
+c#/menu/bin/
+c#/menu/obj/
