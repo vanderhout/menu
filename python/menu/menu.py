@@ -85,7 +85,7 @@ if __name__ == "__main__":
     while True:
         print('')
         result = menu.run(
-            prompt_message='New print function.'
+            prompt_message='New invalid selection function.'
         )
         if result is None:
             break
