@@ -11,7 +11,13 @@ class Menu:
         self.print_option_function = _default_print_option_function
         self.invalid_selection_function = _default_invalid_selection_function
 
-    def add_option(self, key: str, function, context, description: str):
+    def add_option(self, key: str, context, description: str):
+        self.options[key] = {
+            "context": context,
+            "description": description
+        }
+
+    def add_function_option(self, key: str, function, context, description: str):
         self.options[key] = {
             "function": function,
             "context": context,
@@ -32,8 +38,10 @@ class Menu:
             key_choice = input()
         if key_choice in self.options:
             option = self.options[key_choice]
-            if option["function"] is not None:
+            if "function" in option:
                 return option["function"](option["context"])
+            else:
+                return option["context"]
         elif self.invalid_selection_function is not None:
             return self.invalid_selection_function()
 
@@ -46,14 +54,16 @@ if __name__ == "__main__":
 
     menu = Menu()
 
-    menu.add_option('1', set_value, '1', 'Set the value to 1.')
-    menu.add_option('2', set_value, '2', 'Set the value to 2.')
-    menu.add_option('3', set_value, '3', 'Set the value to 3.')
-    menu.add_option('q', None, None, 'Quit to next section.')
+    menu.add_option('0', '0', 'Non-function option.')
+    menu.add_function_option('1', set_value, '1', 'Set the value to 1.')
+    menu.add_function_option('2', set_value, '2', 'Set the value to 2.')
+    menu.add_function_option('3', set_value, '3', 'Set the value to 3.')
+    menu.add_option('q', None, 'Quit to next section.')
 
     while True:
         print('')
         result = menu.run()
+        print('Result: ', result)
         if result is None:
             break
 
@@ -62,6 +72,7 @@ if __name__ == "__main__":
         result = menu.run(
             prompt_message='Prompt message added.'
         )
+        print('Result: ', result)
         if result is None:
             break
 
@@ -73,6 +84,7 @@ if __name__ == "__main__":
         result = menu.run(
             prompt_message='New print function.'
         )
+        print('Result: ', result)
         if result is None:
             break
 
@@ -87,5 +99,6 @@ if __name__ == "__main__":
         result = menu.run(
             prompt_message='New invalid selection function.'
         )
+        print('Result: ', result)
         if result is None:
             break
